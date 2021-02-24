@@ -1,7 +1,7 @@
 //Func to check palindrome
 const isPalindrome = (str) => {
-    for (let i = 0, j = str.length - 1 ; i < str.length/2; ++i, --j) {
-        if (str[i] !== str[j]) {
+    for (let i = 0; i < str.length/2; ++i) {
+        if (str[i] !== str[str.length - 1 - i]) {
             return false
         };
     }
@@ -54,3 +54,5 @@ const quickSort = (data, start = 0, end = data.length - 1) => {
     };
     return result;
   }
+
+  console.log(isPalindrome('1'))
