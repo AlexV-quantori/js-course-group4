@@ -1,13 +1,9 @@
 //Func to check palindrome
 const isPalindrome = (str) => {
-    let i = 0;
-    let j = str.length -1;
-    for (let z=1; z <= str.length/2; ++z) {
+    for (let i = 0, j = str.length - 1 ; i < str.length/2; ++i, --j) {
         if (str[i] !== str[j]) {
             return false
         };
-        ++i;
-        --j;
     }
     return true
   }
@@ -16,18 +12,17 @@ const isPalindrome = (str) => {
   const isPalindrome_v1 = (str) => {
     if (str.length === 1) {
       return true
-    } else{
+    }
       const firstPart = str.slice(0, Math.floor(str.length/2))
       const secondPart = str.slice(-Math.floor(str.length/2))
       if (firstPart === secondPart.split('').reverse().join('')){
           return true
       }
-    }
     return false
   }
 
 // Func to sort arrays (not best, but i tried)
-const quickSort = (data, start=0, end=data.length -1) => {
+const quickSort = (data, start = 0, end = data.length - 1) => {
     console.log(data);
     if (data.length === 0){
       return console.log('Вы передали пустой массив')
@@ -43,7 +38,7 @@ const quickSort = (data, start=0, end=data.length -1) => {
         --right ;
       };
       if (left <= right){
-        [result[right],result[left]] = [result[left],result[right]];
+        [result[right], result[left]] = [result[left], result[right]];
         ++left;
         --right;
       };
