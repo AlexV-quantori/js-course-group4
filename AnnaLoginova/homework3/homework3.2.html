@@ -32,22 +32,38 @@
     const STORAGE_NAME = 'posts';
 
     async function loadPage() {
+        const posts = await getAllPostsFromDatabase();
+        if (posts) {
+            const divElement = document.getElementById("messagesList");
+            posts.forEach((post) => {
+                const aElement = generatePostElement(post)
+                divElement.prepend(aElement);
+            })
+        }
     }
 
     async function getMessage() {
         const postId = document.getElementById('postIdInput').value
-
-        let newPost = await getPostFromDatabase(postId)
+        let newPost = await getPostFromDatabase(postId).then()
+        console.log(newPost)
         if (!newPost) {
-            console.log(newPost)
             newPost = await getPost(postId);
-            if (newPost.body) addPostToDatabase(newPost);
-        } else {console.log('BBBB')}
-
-        if (newPost.body) {
+            newPost.postId = newPost.id;
+            if (newPost.body) await addPostToDatabase(newPost);
             const divElement = document.getElementById("messagesList");
             const aElement = generatePostElement(newPost)
-            divElement.appendChild(aElement);
+            divElement.prepend(aElement);
+        } else {
+            const container = document.querySelector('#messagesList');
+            const messages = document.querySelectorAll('#messagesList a');
+            for (const message of messages) {
+                if (message.textContent.includes(`${newPost.postId}. ${newPost.title}`)) {
+                    container.removeChild(message)
+                    container.prepend(message)
+                    break
+                }
+            }
+
         }
     }
 
@@ -65,7 +81,7 @@
 
     function generatePostElement(post) {
         const h5Element = document.createElement("h5");
-        h5Element.appendChild(document.createTextNode(`${post.id}. ${post.title}`));
+        h5Element.appendChild(document.createTextNode(`${post.postId}. ${post.title}`));
         const divElement = document.createElement("div");
         divElement.appendChild(h5Element);
         const pElement = document.createElement("p");
@@ -94,17 +110,16 @@
 
         openRequest.onsuccess = () => {
             db = openRequest.result;
-            console.log('cre')
 
             let transaction = db.transaction(STORAGE_NAME, "readwrite");
 
             let posts = transaction.objectStore(STORAGE_NAME);
-            let post = {
+            let newPost = {
                 postId: postJson.id,
                 title: postJson.title,
                 body: postJson.body
             };
-            let request = posts.add(post);
+            let request = posts.add(newPost);
 
             request.onsuccess = () => {
                 console.log("Post added", request.result);
@@ -119,7 +134,9 @@
     }
 
     async function getPostFromDatabase(id) {
-        return new Promise(function(resolve, reject) {
+        return new Promise((resolve,reject)=>{
+            setTimeout(()=>{
+        let post = undefined;
             let openRequest = indexedDB.open(DATABASE_NAME, DATABASE_VERSION);
             openRequest.onerror = function () {
                 console.error("Error", openRequest.error);
@@ -132,8 +149,7 @@
                 }
             }
 
-            openRequest.onsuccess = async function () {
-                let post = undefined
+            openRequest.onsuccess = async () => {
                 let db = openRequest.result;
                 if (!db.objectStoreNames.contains(STORAGE_NAME)) {
                     return undefined
@@ -141,17 +157,48 @@
                 let transaction = db.transaction(STORAGE_NAME, "readwrite");
                 let posts = transaction.objectStore(STORAGE_NAME);
                 const getRequest = posts.get(parseInt(id));
-                getRequest.onsuccess = () => {
+
+                getRequest.onsuccess = async () => {
                     post = getRequest.result;
-                    console.log(post)
-                    resolve(post);
+                    resolve(post)
+                }
+            };
+            }, 100);
+        });
+    }
+
+    async function getAllPostsFromDatabase() {
+        return new Promise((resolve,reject)=>{
+            setTimeout(()=>{
+                let posts = undefined;
+                let openRequest = indexedDB.open(DATABASE_NAME, DATABASE_VERSION);
+                openRequest.onerror = function () {
+                    console.error("Error", openRequest.error);
+                };
+
+                openRequest.onupgradeneeded = () => {
+                    let db = openRequest.result;
+                    if (!db.objectStoreNames.contains(STORAGE_NAME)) {
+                        db.createObjectStore(STORAGE_NAME, {keyPath: 'postId', autoIncrement: false});
+                    }
                 }
 
-                // promises huemises
-                await setTimeout(undefined, 1000);
-                return post
-            }
-        })
+                openRequest.onsuccess = async () => {
+                    let db = openRequest.result;
+                    if (!db.objectStoreNames.contains(STORAGE_NAME)) {
+                        return undefined
+                    }
+                    let transaction = db.transaction(STORAGE_NAME, "readwrite");
+                    let posts = transaction.objectStore(STORAGE_NAME);
+                    const getRequest = posts.getAll();
+
+                    getRequest.onsuccess = async () => {
+                        posts = getRequest.result;
+                        resolve(posts)
+                    }
+                };
+            }, 100);
+        });
     }
 
     function deleteDatabase() {
