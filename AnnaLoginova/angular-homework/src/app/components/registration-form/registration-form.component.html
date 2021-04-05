@@ -1,0 +1,295 @@
+<mat-card class="example-card">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title>Sign Up</mat-card-title>
+    <mat-card-subtitle>Fill all fields</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+
+    <form [formGroup]="registrationForm" (submit)="submit()">
+
+      <div formGroupName="account">
+
+        <mat-card-subtitle>Account info</mat-card-subtitle>
+        <mat-form-field class="example-full-width">
+          <mat-label>Email</mat-label>
+          <input
+            type="email"
+            matInput
+            formControlName="email"
+            placeholder="Address@example.com"
+          >
+          <mat-error *ngIf="registrationForm.get('account')!.get('email')!.hasError('email')">
+            Incorrect format
+          </mat-error>
+          <mat-error *ngIf="registrationForm.get('account')!.get('email')!.touched
+    && registrationForm.get('account')!.get('email')!.hasError('required')">
+            Email is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <br>
+
+        <mat-form-field class="example-full-width">
+          <mat-label>Password</mat-label>
+          <input
+            type="password"
+            matInput
+            formControlName="password"
+            placeholder="password"
+          >
+          <mat-error *ngIf="registrationForm.get('account')!.get('password')!.touched
+    && registrationForm.get('account')!.get('password')!.hasError('required')">
+            Password is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="registrationForm.get('account')!.get('password')!.touched
+    && registrationForm.get('account')!.get('password')!.hasError('minlength')">
+            Password has to be more than 6 symbols
+          </mat-error>
+        </mat-form-field>
+        <br>
+
+        <mat-form-field class="example-full-width">
+          <mat-label>Confirm password</mat-label>
+          <input
+            type="password"
+            matInput
+            formControlName="confirmPassword"
+            placeholder="Confirm password"
+          >
+          <mat-error *ngIf="registrationForm.get('account')!.get('password')!.touched
+    && registrationForm.get('account')!.get('confirmPassword')!.touched
+    && registrationForm!.get('account')!.hasError('notSame')">
+            Passwords isn't <strong>the same</strong>
+          </mat-error>
+        </mat-form-field>
+        <br>
+      </div>
+
+      <div formGroupName="profile">
+
+        <mat-card-subtitle>Profile info</mat-card-subtitle>
+        <mat-form-field class="example-full-width">
+          <mat-label>Name</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="name"
+            placeholder="Your name"
+          >
+          <mat-error *ngIf="registrationForm.get('profile')!.get('name')!.touched
+    && registrationForm.get('profile')!.get('name')!.hasError('required')">
+            Name is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <br>
+
+        <mat-form-field class="example-full-width">
+          <mat-label>Phone</mat-label>
+          <input
+            matInput
+            appPhoneMask formControlName="phone"  type="text"
+          >
+          <mat-error *ngIf="registrationForm.get('profile')!.get('phone')!.touched
+    && registrationForm.get('profile')!.get('phone')!.hasError('required')">
+            Phone is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="registrationForm.get('profile')!.get('phone')!.touched
+    && registrationForm.get('profile')!.get('phone')!.hasError('minlength')">
+            Invalid number
+          </mat-error>
+        </mat-form-field>
+        <br>
+
+        <mat-form-field class="example-full-width">
+          <mat-label>City</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="city"
+            placeholder="City"
+          >
+        </mat-form-field>
+        <br>
+      </div>
+
+      <div formGroupName="company">
+
+        <mat-card-subtitle>Company info</mat-card-subtitle>
+
+        <!--          Company name-->
+        <mat-form-field class="example-full-width">
+          <mat-label>Company name</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="name"
+            placeholder="Company name"
+          >
+          <mat-error *ngIf="registrationForm.get('company')!.get('name')!.touched
+    && registrationForm.get('company')!.get('name')!.hasError('required')">
+            Company name is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <br>
+
+        <!--        Form of ownership-->
+        <mat-form-field class="example-full-width">
+          <mat-label>Form of ownership</mat-label>
+          <mat-select formControlName="ownershipForm">
+            <mat-option *ngFor="let ownershipForm of ownershipForms" [value]="ownershipForm.value">
+              {{ownershipForm.viewValue}}
+            </mat-option>
+          </mat-select>
+
+          <mat-error *ngIf="registrationForm.get('company')!.get('ownershipForm')!.touched
+    && registrationForm.get('company')!.get('ownershipForm')!.hasError('required')">
+            Form of ownership is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <br>
+
+        <!--        TIN-->
+        <mat-form-field class="example-full-width">
+          <mat-label>TIN</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="TIN"
+            placeholder="TIN"
+          >
+          <mat-error *ngIf="registrationForm.get('company')!.get('TIN')!.touched
+    && registrationForm.get('company')!.get('TIN')!.hasError('required')">
+            TIN is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="registrationForm.get('company')!.get('TIN')!.touched
+    && (registrationForm.get('company')!.get('TIN')!.hasError('minlength')
+    || registrationForm.get('company')!.get('TIN')!.hasError('maxlength'))">
+            TIN has to be 9 symbols
+          </mat-error>
+        </mat-form-field>
+        <br>
+
+        <!--        Checkpoint-->
+        <mat-form-field *ngIf="registrationForm.get('company')!.get('ownershipForm')!.value === 'individual'"
+                        class="example-full-width">
+          <mat-label>Checkpoint</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="checkpoint"
+            placeholder="Company name"
+          >
+          <mat-error *ngIf="registrationForm.get('company')!.get('checkpoint')!.touched
+    && registrationForm.get('company')!.get('checkpoint')!.hasError('required')">
+            Checkpoint is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="registrationForm.get('company')!.get('checkpoint')!.touched
+    && (registrationForm.get('company')!.get('checkpoint')!.hasError('minlength')
+ || registrationForm.get('company')!.get('checkpoint')!.hasError('maxlength'))">
+            Checkpoint has to be 9 symbols
+          </mat-error>
+          <br>
+        </mat-form-field>
+
+        <!--        OKPO -->
+        <mat-form-field class="example-full-width">
+          <mat-label>OKPO</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="OKPO"
+            placeholder="OKPO"
+          >
+          <mat-error *ngIf="registrationForm.get('company')!.get('OKPO')!.touched
+    && registrationForm.get('company')!.get('OKPO')!.hasError('required')">
+            OKPO is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="registrationForm.get('company')!.get('OKPO')!.touched
+    && (registrationForm.get('company')!.get('OKPO')!.hasError('minlength')
+|| registrationForm.get('company')!.get('OKPO')!.hasError('maxlength'))">
+            OKPO has to be 8 symbols
+          </mat-error>
+        </mat-form-field>
+        <br>
+
+        <!--        Date of formation -->
+        <mat-form-field class="example-full-width">
+          <mat-label>Choose a date</mat-label>
+          <mat-form-field appearance="fill">
+            <mat-label>Choose a date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="formationDate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </mat-form-field>
+        <br>
+      </div>
+
+      <div formArrayName="contacts">
+        <mat-card-subtitle>Contacts info</mat-card-subtitle>
+
+        <div *ngFor="let contact of contactForms.controls; let i=index"
+             [formGroupName]="i">
+
+          <mat-form-field class="example-full-width">
+            <mat-label>Name</mat-label>
+            <input
+              type="text"
+              matInput
+              formControlName="name"
+              placeholder="Name"
+            >
+            <mat-error *ngIf="contact.get('name')!.touched
+    && contact.get('name')!.hasError('required')">
+              Name is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+          <br>
+
+          <mat-form-field class="example-full-width">
+            <mat-label>Phone</mat-label>
+            <input
+              matInput
+              appPhoneMask formControlName="phone"  type="text"
+            >
+            <mat-error *ngIf="contact.get('phone')!.touched
+    && contact.get('phone')!.hasError('required')">
+              Phone is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="contact.get('phone')!.touched
+    && contact.get('phone')!.hasError('minlength')">
+              Invalid number
+            </mat-error>
+          </mat-form-field>
+          <br>
+
+
+          <mat-form-field class="example-full-width">
+            <mat-label>Title</mat-label>
+            <input
+              type="text"
+              matInput
+              formControlName="title"
+              placeholder="Title"
+            >
+            <mat-error *ngIf="contact.get('title')!.touched
+    && contact.get('title')!.hasError('required')">
+              Title is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+          <br>
+        <button mat-raised-button color="basic" (click)="deleteContact(i)">Delete contact</button>
+          <br> <br>
+          <mat-divider></mat-divider>
+          <br>
+        </div>
+        </div>
+      <button mat-raised-button color="accent" (click)="addContact()">Add contact</button>
+      <br>
+      <br>
+      <button mat-raised-button color="primary" type="submit">Sing up</button>
+    </form>
+    <br>
+  </mat-card-content>
+</mat-card>
+
