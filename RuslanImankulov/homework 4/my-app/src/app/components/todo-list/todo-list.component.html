@@ -1,0 +1,4 @@
+<app-add-item (newItemEvent)="addItem($event)"></app-add-item>
+<ul>
+    <app-todo-item *ngFor ='let item of items' [item]='item'></app-todo-item>
+</ul>
