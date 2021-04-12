@@ -1,0 +1,167 @@
+
+
+<mat-card class="example-card">
+    <mat-card-header>
+        <h1>Create your account</h1>
+    </mat-card-header>
+    <mat-card-content>
+        <!-- <input type="text" placeholder="confirm password" formControlName='confirmPassword'><br> -->
+        <form [formGroup]="form" class="example-form" (submit)='submit()'>
+            <section formGroupName="account" class="form-block">
+                <h3>Account</h3>
+                <mat-form-field class="example-full-width">
+                  <mat-label>Email</mat-label>
+                  <input
+                    type="email"
+                    matInput
+                    formControlName="email"
+                    placeholder="Ex. pat@example.com"
+                  >
+                  <mat-error *ngIf="form.get('account.email')?.hasError('email')">
+                    Incorrect format
+                  </mat-error>
+                  <mat-error *ngIf="form.get('account.email')?.touched && form.get('account.email')?.hasError('required')">
+                    Email is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field><br>
+        
+                <mat-form-field class="example-full-width">
+                  <mat-label>Password</mat-label>
+                  <input
+                    type="password"
+                    matInput
+                    formControlName="password"
+                    placeholder="password"
+                  >
+                  <mat-error *ngIf="form.get('account.password')?.touched && form.get('account.password')?.hasError('required')">
+                    Password is <strong>required</strong>
+                  </mat-error>
+                  <mat-error *ngIf="form.get('account.password')?.touched && form.get('account.password')?.hasError('minlength')">
+                    Password has to be more than 6 symbols
+                  </mat-error>
+                </mat-form-field><br>
+        
+                <mat-form-field class="example-full-width">
+                  <mat-label>Password</mat-label>
+                  <input
+                    type="password"
+                    matInput
+                    formControlName="confirmPassword"
+                    placeholder="confirmPassword"
+                  >
+                  <mat-error *ngIf="form.get('account.password')?.touched && form.get('account.confirmPassword')?.touched && form.hasError('notSame')">
+                    Passwords isn't <strong>the same</strong>
+                  </mat-error>
+                </mat-form-field><br>
+            </section><br>
+            <section formGroupName="profile" class="form-block">
+                <h3>Profile</h3>
+                <mat-form-field class="example-full-width">
+                  <mat-label>Name</mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    formControlName="name"
+                    placeholder="name"
+                  >
+                </mat-form-field><br>
+        
+                <mat-form-field class="example-full-width">
+                  <mat-label>Phone</mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    formControlName="phone"
+                    placeholder="phone"
+                    mask='+7 (000) 000-0000'
+                  >
+                  <mat-error *ngIf="form.get('profile.phone')?.touched && form.get('account.password')?.hasError('required')">
+                    Phone is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field><br>
+        
+                <mat-form-field class="example-full-width">
+                  <mat-label>City</mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    formControlName="City"
+                    placeholder="City"
+                  >
+                </mat-form-field><br>
+            </section><br>
+            <section formGroupName="company" class="form-block">
+                <h3>Company</h3>
+                <mat-form-field class="example-full-width">
+                  <mat-label>Name</mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    formControlName="name"
+                    placeholder="name"
+                  >
+                </mat-form-field><br>
+        
+                <mat-form-field class="example-full-width">
+                  <mat-label>Ownership</mat-label>
+                  <mat-select formControlName="ownership">
+                    <mat-option value="" selected></mat-option>
+                    <mat-option value="IP">{{ CompanyTypes.IP }}</mat-option>
+                    <mat-option value="LLC">{{ CompanyTypes.LLC }}</mat-option>
+                  </mat-select>
+                </mat-form-field><br>
+        
+                <mat-form-field class="example-full-width">
+                  <mat-label>Date</mat-label>
+                  <input matInput [matDatepicker]="picker" formControlName="date">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field><br>
+            </section>
+            <section formArrayName="contacts" class="form-block">
+                <div class="contacts-header">
+                <h3>Contacts</h3>
+                <button mat-stroked-button (click)="addContact()" type="button">Add contact</button>
+                </div>
+        
+                <div *ngFor="let control of getContactsControls(); let i = index;" [formGroupName]="i" class="form-block__contact">
+                <h4>Contact {{ i + 1 }}</h4>
+                <mat-form-field class="example-full-width">
+                    <mat-label>Name</mat-label>
+                    <input
+                    type="text"
+                    matInput
+                    formControlName="name"
+                    placeholder="name"
+                    >
+                </mat-form-field><br>
+                <mat-form-field class="example-full-width">
+                    <mat-label>Title</mat-label>
+                    <input
+                    type="text"
+                    matInput
+                    formControlName="title"
+                    placeholder="name"
+                    >
+                </mat-form-field><br>
+                <mat-form-field class="example-full-width">
+                    <mat-label>Phone</mat-label>
+                    <input
+                    type="text"
+                    matInput
+                    formControlName="phone"
+                    placeholder="phone"
+                    mask="+0 (000) 000 0000"
+                    >
+                    <mat-error *ngIf="form.get('contacts.' + i +'.phone')?.touched && form.get('contacts.' + i +'.phone')?.hasError('required')">
+                    Phone is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field><br>
+                </div>
+                <br>
+            </section>
+            <button mat-raised-button color="warn" type="submit">Sign up</button>
+            
+        </form>
+    </mat-card-content>
+  </mat-card>

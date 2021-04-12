@@ -1,0 +1,28 @@
+mat-card-content {
+    padding-left: 55px;
+    padding-right: 55px;
+  }
+  
+  mat-card {
+    width: 500px;
+    margin: 50px auto;
+    padding-bottom: 50px;
+    padding-top: 50px;
+  }
+  
+  .mat-form-field {
+    width: 100%;
+  }
+  
+  .contacts-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  
+  .form-block {
+    margin-bottom: 30px;
+    &__contact {
+      margin-bottom: 20px;
+    }
+  }
